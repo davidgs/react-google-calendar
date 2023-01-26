@@ -26,7 +26,7 @@ export default class Tooltip extends React.Component {
       timeDisplay: Tooltip.getTimeDisplay(this.props.startTime, this.props.endTime, allDay),
       eventURL: getCalendarURL(this.props.startTime, this.props.endTime, this.props.name, this.props.description, this.props.location, allDay),
     }
-    
+
   }
 
   static getTimeDisplay(startTime, endTime, allDay) {
@@ -40,7 +40,7 @@ export default class Tooltip extends React.Component {
       }
     } else {
       if (endTime.isSame(startTime, "day")) {
-        return startTime.format("dddd, MMMM Do") + "\n" 
+        return startTime.format("dddd, MMMM Do") + "\n"
           + startTime.format("h:mma") + " - " + endTime.format("h:mma");
       } else {
         return startTime.format("MMM Do, YYYY, h:mma") + " -\n" + endTime.format("MMM Do, YYYY, h:mma");
@@ -54,7 +54,7 @@ export default class Tooltip extends React.Component {
       description = <div className="details description">
         <div css={{ paddingRight: "10px" }}><Subject fill="currentColor" /></div>
         <div css={{ overflowWrap: "break-word", maxWidth: "calc(100% - 28px)" }}
-          onMouseDown={e => {if (e.target.nodeName == 'A') {e.preventDefault()}}} 
+          onMouseDown={e => {if (e.target.nodeName == 'A') {e.preventDefault()}}}
           dangerouslySetInnerHTML={{__html: this.props.description}} />
       </div>;
     } else {
@@ -82,67 +82,78 @@ export default class Tooltip extends React.Component {
     }
 
     return (
-      <Popper modifiers={[{ name: 'preventOverflow', options: { altAxis: true } }]}>
+      <Popper
+        modifiers={[{ name: "preventOverflow", options: { altAxis: true } }]}
+      >
         {({ ref, style, placement, arrowProps }) => (
-          <div 
-            className="tooltip" 
+          <div
+            className="tooltip"
             ref={ref}
             style={style}
             data-placement={placement}
-            css={[css`
-              visibility: ${this.props.showTooltip ? "visible" : "hidden"};
-              width: 250px;
-              background: #fff;
-              text-align: left;
-              padding: 5px;
-              border-radius: 6px;
-              color: #51565d;
-              border: 2px solid rgba(81, 86, 93, 0.1);
-              position: absolute;
-              z-index: 1;
-            `, this.props.tooltipStyles]}
-          >
-            <div css={{
-              position: "relative",
-            }}>
-              <div css={css`
+            css={[
+              css`
+                visibility: ${this.props.showTooltip ? "visible" : "hidden"};
+                width: 250px;
+                background: rgb(1, 22, 39);
+                text-align: left;
+                padding: 5px;
+                border-radius: 6px;
+                color: rgb(225, 237, 255);
+                border: 2px solid rgba(1, 22, 39, 0.5);
                 position: absolute;
-                right: 2px;
-                top: -5px;
-                opacity: 0.5;
-                font-size: 24px;
-                &:hover {
-                  cursor: pointer;
-                  opacity: 0.9;
-                }
-              `}
+                z-index: 1;
+              `,
+              this.props.tooltipStyles,
+            ]}
+          >
+            <div
+              css={{
+                position: "relative",
+              }}
+            >
+              <div
+                css={css`
+                  position: absolute;
+                  right: 2px;
+                  top: -5px;
+                  opacity: 0.5;
+                  font-size: 24px;
+                  &:hover {
+                    cursor: pointer;
+                    opacity: 0.9;
+                  }
+                `}
                 onClick={this.props.closeTooltip}
               >
                 &times;
               </div>
-              <h2 className="tooltip-text" css={{marginTop: "0px", paddingTop: "18.675px"}}>{this.props.name}</h2>
-              <p className="display-linebreak">
-                { this.state.timeDisplay }
-              </p>
+              <h2
+                className="tooltip-text"
+                css={{ marginTop: "0px", paddingTop: "18.675px" }}
+              >
+                {this.props.name}
+              </h2>
+              <p className="display-linebreak">{this.state.timeDisplay}</p>
               {description}
               {location}
               {calendarName}
-              <a 
+              <a
                 href={this.state.eventURL}
                 target="_blank"
-                onMouseDown={e => e.preventDefault()}
+                onMouseDown={(e) => e.preventDefault()}
                 css={{
                   fontSize: "13px",
-                  tabIndex: -1
+                  tabIndex: -1,
+                  color: "rgb(225, 237, 255)",
                 }}
               >
                 Copy to Calendar
               </a>
             </div>
           </div>
-        )}    
+        )}
       </Popper>
-      
     );
   }
 }
