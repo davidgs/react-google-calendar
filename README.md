@@ -16,7 +16,7 @@ Design inspired by [this calendar](https://codepen.io/knyttneve/pen/QVqyNg) and 
 
 ```
 1. npm install --save react react-dom @emotion/react
-2. npm install --save @ericz1803/react-google-calendar
+2. npm install --save @davidgs/react-google-calendar
 ```
 
 ## Usage
@@ -25,14 +25,14 @@ First, get an api key from [here](https://developers.google.com/calendar/quickst
 
 Alternately, you can go to https://console.developers.google.com/flows/enableapi?apiid=calendar.
 
-Then, get the calendar id from the google calendar. It will look something like `09opmkrjova8h5k5k46fedmo88@group.calendar.google.com`.  
+Then, get the calendar id from the google calendar. It will look something like `09opmkrjova8h5k5k46fedmo88@group.calendar.google.com`.
 You can find it by going to a calendar's settings and scrolling down to the section that is labelled `Integrate calendar`.
 
 ### Basic Example
 
 ```js
 import React from "react";
-import Calendar from "@ericz1803/react-google-calendar";
+import Calendar from "@davidgs/react-google-calendar";
 
 const API_KEY = "YOUR_API_KEY";
 let calendars = [
