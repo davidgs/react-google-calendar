@@ -13,8 +13,6 @@ import { css, jsx } from '@emotion/react'
 import _ from "lodash";
 import gud from "gud";
 import { Languages, availableLanguages } from "./languages";
-const todayimg = require("./svg/calendar-heart.svg");
-import {SvgComponent as TodayIcon} from "./svg/calendarToday";
 export default class Calendar extends React.Component {
   constructor(props) {
     super(props);

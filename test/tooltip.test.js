@@ -13,11 +13,11 @@ describe("Tooltip Time Display", () => {
 
     let output = Tooltip.getTimeDisplay(startTime, endTime, false);
     let expected = "Monday, April 20th\n4:30am - 3:30pm";
-    
+
     expect(output).toEqual(expected);
   });
 
-  
+
   test("one day all day event",() => {
     let startTime = moment.utc("2020-04-20").startOf("day");
     let endTime = moment.utc("2020-04-21").startOf("day");
@@ -31,7 +31,7 @@ describe("Tooltip Time Display", () => {
   test("multiple day all day event",() => {
     let startTime = moment.utc("2020-03-20").startOf("day");
     let endTime = moment.utc("2020-03-25").startOf("day");
-    
+
     let output = Tooltip.getTimeDisplay(startTime, endTime, true);
     let expected = "Mar 20th, 2020 - Mar 24th, 2020";
 
@@ -41,7 +41,7 @@ describe("Tooltip Time Display", () => {
   test("multiple day event",() => {
     let startTime = moment.utc("2020-03-20T04:30:00+00:00");
     let endTime = moment.utc("2020-03-25T15:30:00+00:00");
-    
+
     let output = Tooltip.getTimeDisplay(startTime, endTime, false);
     let expected = "Mar 20th, 2020, 4:30am -\nMar 25th, 2020, 3:30pm";
 
