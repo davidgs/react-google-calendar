@@ -2,21 +2,14 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-
 import moment from "moment-timezone";
-
 import "./index.css";
-
 import { css, jsx } from '@emotion/react';
-
 import { Popper } from 'react-popper';
-
 import { isAllDay, getCalendarURL } from "./utils/helper";
-
 import Place from "./svg/place";
 import Subject from "./svg/subject";
 import CalendarToday from "./svg/calendarToday";
-
 export default class Tooltip extends React.Component {
   constructor(props) {
     super(props);
@@ -90,7 +83,7 @@ export default class Tooltip extends React.Component {
             className="tooltip"
             ref={ref}
             style={style}
-            data-placement={placement}
+            data-placement="top" // {placement}
             css={[
               css`
                 visibility: ${this.props.showTooltip ? "visible" : "hidden"};
