@@ -1,0 +1,29 @@
+import * as React from "react"
+
+function TodaySvg(props) {
+  return (
+    <svg
+      version="1.1"
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      viewBox="0 0 16 16"
+      width={16}
+      height={16}
+      style={{
+        enableBackground: "new 0 0 16 16",
+        xml: "space = preserve",
+        fillRule: "evenodd",
+        clipRule: "evenodd",
+        fill: "#E1EDFF",
+      }}
+    >
+<path d="M4,0.5C4,0.2,3.8,0,3.5,0S3,0.2,3,0.5V1H2C0.9,1,0,1.9,0,3v11c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V3
+	c0-1.1-0.9-2-2-2h-1V0.5C13,0.2,12.8,0,12.5,0S12,0.2,12,0.5V1H4V0.5z M1,14V4h14v10c0,0.6-0.4,1-1,1H2C1.4,15,1,14.6,1,14z M8,7.5
+	c1.7-1.7,5.8,1.3,0,5.1C2.2,8.8,6.3,5.8,8,7.5z"/>
+    </svg>
+  )
+}
+
+export default TodaySvg

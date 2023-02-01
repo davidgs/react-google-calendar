@@ -19,7 +19,7 @@ export default class Event extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {      
+    this.state = {
       startTime: moment(this.props.startTime),
       endTime: moment(this.props.endTime),
 
@@ -41,7 +41,7 @@ export default class Event extends React.Component {
   render() {
     return (
       <Manager>
-        <div 
+        <div
           className="event"
           tabIndex="0"
           onBlur={this.closeTooltip}
@@ -53,50 +53,66 @@ export default class Event extends React.Component {
           `}
         >
           <Reference>
-            {({ref}) => (
-              <div css={[css`
-                  border-radius: 3px;
-                  width: 100%;
-                  &:hover {
-                    cursor: pointer;
-                    background: rgba(81, 86, 93, 0.1);
-                  }
-                `, this.props.eventStyles]}
+            {({ ref }) => (
+              <div
+                css={[
+                  css`
+                    border-radius: 3px;
+                    width: 100%;
+                    &:hover {
+                      cursor: pointer;
+                      background: rgba(81, 86, 93, 0.1);
+                    }
+                  `,
+                  this.props.eventStyles,
+                ]}
                 onClick={this.toggleTooltip}
                 ref={ref}
               >
-                <div 
-                  className="event-text" 
-                  css={[{
-                    color: "#51565d",
-                    padding: "3px 0px 3px 20px",
-                    marginRight: "5px",
-                    overflowX: "hidden",
-                    whiteSpace: "nowrap",
-                    position: "relative",
-                    textAlign: "left",
-                  }, this.props.eventTextStyles]}
+                <div
+                  className="event-text"
+                  css={[
+                    {
+                      color: "rgb(225,237,255)",
+                      padding: "3px 0px 3px 20px",
+                      marginRight: "5px",
+                      overflowX: "hidden",
+                      whiteSpace: "nowrap",
+                      position: "relative",
+                      textAlign: "left",
+                    },
+                    this.props.eventTextStyles,
+                  ]}
                 >
-                  <span css={[{
-                    position: "absolute",
-                    top: "5px",
-                    left: "2px",
-                    color: this.props.color,
-                    height: "15px",
-                    width: "15px",
-                  }, this.props.eventCircleStyles]}>
-                    <FiberManualRecordIcon fill="currentColor" fontSize="inherit" width="100%" />
+                  <span
+                    css={[
+                      {
+                        position: "absolute",
+                        top: "5px",
+                        left: "2px",
+                        color: "#FAD32D",
+                        height: "15px",
+                        width: "15px",
+                      },
+                      this.props.eventCircleStyles,
+                    ]}
+                  >
+                    <FiberManualRecordIcon
+                      fill="#FAD32D"
+                      fontSize="inherit"
+                      width="100%"
+                    />
                   </span>
-                  <span css={css`
-                    @media (max-width: 599px) {
-                      display: none;
-                    }
-                  `}>
-                    { this.state.startTime.format("h:mma ") }
+                  <span
+                    css={css`
+                      @media (max-width: 599px) {
+                        display: none;
+                      }
+                    `}
+                  >
+                    {this.state.startTime.format("h:mma ")}
                   </span>
-                  <span css={{fontWeight: "500"}}>
-                    {this.props.name}
-                  </span>
+                  <span css={{ fontWeight: "500" }}>{this.props.name}</span>
                 </div>
               </div>
             )}
@@ -114,7 +130,7 @@ export default class Event extends React.Component {
           />
         </div>
       </Manager>
-    )
+    );
   }
 }
 

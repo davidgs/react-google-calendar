@@ -2,26 +2,19 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-
 import moment from "moment-timezone";
 import { RRule, RRuleSet, rrulestr } from "rrule";
-
 import "./index.css";
-
 import Event from "./event";
 import MultiEvent from "./multiEvent";
-
 import { isMultiEvent } from "./utils/helper";
 import { loadCalendarAPI, getEventsList } from "./utils/googleCalendarAPI";
-
 import { css, jsx } from '@emotion/react'
-
 import _ from "lodash";
-
 import gud from "gud";
-
 import { Languages, availableLanguages } from "./languages";
-
+const todayimg = require("./svg/calendar-heart.svg");
+import {SvgComponent as TodayIcon} from "./svg/calendarToday";
 export default class Calendar extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +29,7 @@ export default class Calendar extends React.Component {
       userTimezone: moment.tz.guess(),
       showFooter: props.showFooter,
     };
-    
+
     this.lastMonth = this.lastMonth.bind(this);
     this.nextMonth = this.nextMonth.bind(this);
   }
@@ -70,13 +63,13 @@ export default class Calendar extends React.Component {
       try {
         //query api for events
         const res = await getEventsList(calendar.calendarId);
-  
+
         //process events
         const events = this.processEvents(res.result.items, res.result.summary, calendar.color);
-  
+
         //set state with calculated values
         this.setState({"events": [...this.state.events, ...events[0]], "singleEvents": [...this.state.singleEvents, ...events[1]]});
-  
+
       } catch(err) {
         console.error("Error getting events", err);
       }
@@ -95,7 +88,7 @@ export default class Calendar extends React.Component {
         if (event.status == "cancelled") { //cancelled events
           cancelled.push({
             recurringEventId: event.recurringEventId,
-            originalStartTime: event.originalStartTime.dateTime ? moment(event.originalStartTime.dateTime) : moment.parseZone(event.originalStartTime.date), 
+            originalStartTime: event.originalStartTime.dateTime ? moment(event.originalStartTime.dateTime) : moment.parseZone(event.originalStartTime.date),
           });
         } else if (event.status == "confirmed") { //changed events
           changed.push({
@@ -185,14 +178,17 @@ export default class Calendar extends React.Component {
       }
     }
   }
-  
+
   //renders the day of week names
   renderDays() {
     return this.state.days.map((x, i) => (
       <div
         className="day-name"
         key={"day-of-week-" + i}
-        css={[{ borderColor: "LightGray" }, _.get(this.props.styles, 'day', {})]}
+        css={[
+          { borderColor: "rgb(225, 237, 255)" },
+          _.get(this.props.styles, "day", {}),
+        ]}
       >
         {x}
       </div>
@@ -205,7 +201,7 @@ export default class Calendar extends React.Component {
 
     var dayOfWeek = this.state.current.day(); //get day of week of first day in the month
 
-    var padDays = (((-this.state.current.daysInMonth() - this.state.current.day()) % 7) + 7) % 7; //number of days to fill out the last row    
+    var padDays = (((-this.state.current.daysInMonth() - this.state.current.day()) % 7) + 7) % 7; //number of days to fill out the last row
 
     return [
       [...Array(dayOfWeek)].map((x, i) => (
@@ -219,18 +215,24 @@ export default class Calendar extends React.Component {
         if (x == this.state.today.date() && this.state.current.isSame(this.state.today, "month")) {
           return (
             <div
-              className="day"
+              className="day today"
               key={"day-" + x}
-              css={[_.get(this.props.styles, 'day', {}), _.get(this.props.styles, 'today', {})]}
+              css={[
+                _.get(this.props.styles, "day", {}),
+                // _.get(this.props.styles, "today", {}),
+              ]}
             >
-              <span
-                css={{
-                  paddingRight: '6px',
-                }}
-              >
-                {x}
-              </span>
-              <div className="innerDay" id={"day-" + x}>{eventsEachDay[x - 1]}</div>
+                <span
+                  css={{
+                    paddingRight: "6px",
+                    color: "rgb(225, 237, 255)",
+                  }}
+                >
+                  <img src={require('./svg/calendarToday').default} id="TodayImg" class="today-img" alt="today" /> {x}
+                </span>
+              <div className="innerDay" id={"day-" + x}>
+                {eventsEachDay[x - 1]}
+              </div>
             </div>
           );
         } else {
@@ -265,7 +267,7 @@ export default class Calendar extends React.Component {
   //get array of arrays of length days in month containing the events in each day
   getRenderEvents(events, singleEvents) {
     let eventsEachDay = [...Array(this.state.current.daysInMonth())].map((e) => []); //create array of empty arrays of length daysInMonth
-    
+
     events.forEach((event) => {
       if (event.recurrence) {
         let duration = moment.duration(event.endTime.diff(event.startTime));
@@ -301,11 +303,11 @@ export default class Calendar extends React.Component {
               description: event.description,
               location: event.location,
               calendarName: event.calendarName,
-              color: event.color
+              color: "red"
             };
           }
-          
-          this.drawMultiEvent(eventsEachDay, props);   
+
+          this.drawMultiEvent(eventsEachDay, props);
         });
       } else {
         //render event
@@ -330,7 +332,7 @@ export default class Calendar extends React.Component {
     singleEvents.forEach((event) => {
       if (event.recurrence) {
         let duration = moment.duration(event.endTime.diff(event.startTime));
-        
+
         //get recurrences using RRule
         let dates = Calendar.getDatesFromRRule(event.recurrence[0], event.startTime, moment(this.state.current), moment(this.state.current).add(1, "month"));
 
@@ -366,7 +368,7 @@ export default class Calendar extends React.Component {
               color: event.color
             };
           }
-          
+
           this.renderSingleEvent(eventsEachDay, moment(props.startTime).date(), {...props, ...eventProps});
         });
       } else {
@@ -384,7 +386,7 @@ export default class Calendar extends React.Component {
 
   //TODO: refactor
   //decides how to render events
-  drawMultiEvent(eventsEachDay, props) { 
+  drawMultiEvent(eventsEachDay, props) {
     let startDrawDate;
     let blockLength = 1;
     let curDate;
@@ -403,7 +405,7 @@ export default class Calendar extends React.Component {
       if (this.props.showArrow) {
         arrowLeft = true;
       }
-      
+
       startDrawDate = 1;
       curDate = moment(this.state.current).utc(true);
     } else {
@@ -416,7 +418,7 @@ export default class Calendar extends React.Component {
         if (this.props.showArrow) {
           arrowRight = true;
         }
-        
+
         //draw then quit
         this.renderMultiEventBlock(eventsEachDay, startDrawDate, blockLength, props, arrowLeft, arrowRight);
         break;
@@ -441,8 +443,8 @@ export default class Calendar extends React.Component {
   }
 
   //TODO: refactor this too?
-  //handles rendering and proper stacking of individual blocks 
-  renderMultiEventBlock(eventsEachDay, startDate, length, props, arrowLeft, arrowRight) { 
+  //handles rendering and proper stacking of individual blocks
+  renderMultiEventBlock(eventsEachDay, startDate, length, props, arrowLeft, arrowRight) {
     let multiEventProps = {
       tooltipStyles: _.get(this.props.styles, 'tooltip', {}), //gets this.props.styles.tooltip if exists, else empty object
       multiEventStyles: _.get(this.props.styles, 'multiEvent', {}),
@@ -463,7 +465,7 @@ export default class Calendar extends React.Component {
           break;
         } else if (closedSlots.includes(j)) {
           continue;
-        } 
+        }
         if (dayEvents[j].props.className.includes("isEvent")) {
           closedSlots.push(j);
         }
@@ -488,7 +490,7 @@ export default class Calendar extends React.Component {
       //rest of event that is under the main banner
       eventsEachDay[startDate - 1 + i][chosenRow] = <div className="isEvent event below" key={`filler-${gud()}`}></div>;
     }
-  
+
     //render event
     eventsEachDay[startDate - 1][chosenRow] = <div className="isEvent" key={`multi-event-${chosenRow}`}><MultiEvent {...props} {...multiEventProps} length={length} arrowLeft={arrowLeft} arrowRight={arrowRight} key={`multi-event-${gud()}`}/></div>;
   }
@@ -510,11 +512,11 @@ export default class Calendar extends React.Component {
   }
 
   //get dates based on rrule string between dates
-  static getDatesFromRRule(str, eventStart, betweenStart, betweenEnd) {    
+  static getDatesFromRRule(str, eventStart, betweenStart, betweenEnd) {
     //get recurrences using RRule
     let rstr = `DTSTART:${moment(eventStart).utc(true).format('YYYYMMDDTHHmmss')}Z\n${str}`;
     let rruleSet = rrulestr(rstr, {forceset: true});
-    
+
     //get dates
     let begin = moment(betweenStart).utc(true).toDate();
     let end = moment(betweenEnd).utc(true).toDate();
@@ -527,14 +529,17 @@ export default class Calendar extends React.Component {
     return (
       <div
         className="calendar"
-        css={[{
-          fontSize: "18px",
-          border: "1px solid",
-          minWidth: "300px",
-          position: "relative",
-          borderColor: "LightGray",
-          color: "#51565d",
-        }, _.get(this.props.styles, 'calendar', {})]}
+        css={[
+          {
+            fontSize: "18px",
+            border: "1px solid",
+            minWidth: "300px",
+            position: "relative",
+            borderColor: "rgb(225, 237, 255)",
+            color: "#51565d",
+          },
+          _.get(this.props.styles, "calendar", {}),
+        ]}
       >
         <div className="calendar-header">
           <div
@@ -545,7 +550,9 @@ export default class Calendar extends React.Component {
           </div>
           <div>
             <h2 className="calendar-title">
-              {this.state.monthNames[this.state.current.month()] + " " + this.state.current.year()}
+              {this.state.monthNames[this.state.current.month()] +
+                " " +
+                this.state.current.year()}
             </h2>
           </div>
           <div
@@ -559,34 +566,45 @@ export default class Calendar extends React.Component {
           {this.renderDays()}
           {this.renderDates(eventsEachDay)}
         </div>
-        { this.state.showFooter && 
+        {this.state.showFooter && (
           <div className="calendar-footer">
-            <div css={css`
-              font-size: 14px;
-              padding-left: 5px;
-              text-align: left;
-            `}>
-              All times shown your timezone ({moment().tz(this.state.userTimezone).format("z")})
-            </div>
-            <div css={css`
-              vertical-align: top;
-              margin-left: 3px;
-              margin-right: 3px;
-            `}>
-              <a href={"https://calendar.google.com/calendar/r?cid=" + this.props.calendarId} target="_blank" css={css`
+            <div
+              css={css`
                 font-size: 14px;
-                text-decoration: none;
-                color: inherit;
-                &:hover {
-                  text-decoration: underline;
+                padding-left: 5px;
+                text-align: left;
+              `}
+            >
+              All times shown your timezone (
+              {moment().tz(this.state.userTimezone).format("z")})
+            </div>
+            <div
+              css={css`
+                vertical-align: top;
+                margin-left: 3px;
+                margin-right: 3px;
+              `}
+            >
+              <a
+                href={
+                  "https://calendar.google.com/calendar/r?cid=" +
+                  this.props.calendarId
                 }
-              `}>
+                target="_blank"
+                css={css`
+                  font-size: 14px;
+                  text-decoration: none;
+                  color: inherit;
+                  &:hover {
+                    text-decoration: underline;
+                  }
+                `}
+              >
                 &#43; Add Calendar
               </a>
             </div>
           </div>
-        }
-        
+        )}
       </div>
     );
   }
