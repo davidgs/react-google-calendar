@@ -1,5 +1,5 @@
 {
-  "name": "@ericz1803/react-google-calendar",
+  "name": "@davidgs/react-google-calendar",
   "version": "4.2.2",
   "description": "React Google Calendar Component",
   "main": "index.js",
@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ericz1803/react-google-calendar.git"
+    "url": "git+https://github.com/davidgs/react-google-calendar.git"
   },
-  "author": "Eric Zhou",
+  "author": "David G Simmons fork of Eric Zhou",
   "license": "MIT",
   "keywords": [
     "react",
